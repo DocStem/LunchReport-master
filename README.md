@@ -2,7 +2,7 @@ Lunch Reports Plugin
 ====================
 
 ![screenshot](LunchReport.png)
-
+![screenshot](detailed.png)
 
 Version 1.0 - January, 2021
 
