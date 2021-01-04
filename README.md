@@ -44,6 +44,6 @@ INSTALL
 -------
 Copy the `LunchReport/` folder (if named `LunchReport-master`, rename it) and its content inside the `modules/` folder of RosarioSIS.
 
-Go to _School > Configuration > Plugins_ and click "Activate".
+Go to _School > Configuration > Modules_ and click "Activate".
 
 Requires RosarioSIS 5.5+
