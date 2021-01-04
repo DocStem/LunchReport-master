@@ -1,7 +1,7 @@
 Lunch Reports Plugin
 ====================
 
-![screenshot](https://gitlab.com/francoisjacquet/Reports/raw/master/screenshot.png?inline=false)
+![screenshot](LunchReport.png)
 
 
 Version 1.0 - January, 2021
