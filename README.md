@@ -26,11 +26,14 @@ CONTENT
 Student
 	Reports
 	- Lunch Reports
+It will appear in Student Reports
+![screenshot](menuplacement.png)
 	
 
 IMPORTANT SETUP INFORMATION
 ---------------------------
-This module assumes that you use the FOOD ORDER same as with Attendance and that you are not running a full blow Food system. It takes simple Menu Orders when you take the Attendance. Set up the Food Order per the Rosario SIS instructions.
+This module assumes that you use the FOOD ORDER same as with Attendance and that you are not running a full blow Food system. It takes simple Menu Orders when you take the Attendance. Set up the Food Order per the Rosario SIS instructions. We wrote this during COVID, so we needed to be able to take the food to the children since they cannot come to a Cafeteria.
+We take Food orders this way ![screenshot](attendanceFood.png)
 
 Also YOU MUST create a Student Custom Field of CLASS. We use this to track the graduation year of every student. This information is invaluable to many things we do. Example Class2025
 
