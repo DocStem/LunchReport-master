@@ -50,3 +50,7 @@ Copy the `LunchReport/` folder (if named `LunchReport-master`, rename it) and it
 Go to _School > Configuration > Modules_ and click "Activate".
 
 Requires RosarioSIS 5.5+
+
+Update
+-------
+Update Sept. 2021 -- added the condition of school year to the query condition to stop repeats that happened with students from previous year. The condition is that syear = UserSYear

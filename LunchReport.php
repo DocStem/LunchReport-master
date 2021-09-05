@@ -10,7 +10,7 @@ $date = RequestedDate( 'end', DBDate() );
 // Add Course Period title header.
 		DrawHeader( ProgramTitle() );
 		// Set date.
-
+echo '<div id="GFG" >' ;
 echo '<style>
 .styled-table {
     border-collapse: collapse;
@@ -79,10 +79,24 @@ echo '<style>
 }
 </style>';
 
+echo "
+<!-- Script to print the content of a div -->
+    <script> 
+        function printDiv() { 
+            var divContents = document.getElementById('GFG').innerHTML; 
+            var a = window.open('', '', 'height=500, width=500'); 
+             
+            a.document.write(divContents); 
+           
+            a.document.close(); 
+            a.print(); 
+        } 
+    </script> ";
+
 
 echo '<form action="' .
 		PreparePHP_SELF( $_REQUEST, array( 'codes', 'month', 'day', 'year' ) ) .
-		'" method="POST">';
+		'" method="POST" >';
 
 		
 		
@@ -128,15 +142,21 @@ if(isset($_REQUEST['day']) && is_numeric($_REQUEST['day']) &&
 	echo '<h2>Lunch orders for ' . $_REQUEST['month'] . '-' . $_REQUEST['day'] . '-' . $_REQUEST['year'] .'</h2>';
 
 		$lunchDate = $_REQUEST['year'] .'-'. $_REQUEST['month'] .'-' . $_REQUEST['day'] ;
-		$SQL_Lunches = "Select first_name, last_name, class, menu_item,lunch_comment, school_date from student_lunches Where menu_item <> 'No Lunch' AND school_date = '" . $lunchDate
-		  . "' Order by school_date, class ;";
+		$SQL_Lunches = "Select first_name, last_name, class, menu_item,lunch_comment, school_date 
+		from student_lunches 
+		Where menu_item <> 'No Lunch' 
+		AND school_date = '" . $lunchDate ."'
+		AND syear = UserSyear()
+		Order by school_date, class ;";
 
 		$lunchOrders = DBGet( $SQL_Lunches);
 
 
 
 		if(count($lunchOrders) > 0){ //This is a school day with Lunch Orders
-		echo '<button onClick="window.print()">Print</button>';
+		//echo '<button target="_blank" onClick="window.print()">Print</button>';
+ echo '<input type="button" value="Print" onclick="printDiv()">';
+
 
 				
 
@@ -148,7 +168,11 @@ if(isset($_REQUEST['day']) && is_numeric($_REQUEST['day']) &&
 		$SQL_Rows = "Select class from student_lunches Group By class  Order by class ;";
 				$gridRows = DBGet( $SQL_Rows);
 
-		$SQL_Columns = "Select menu_item from student_lunches Where menu_item <> 'No Lunch' AND school_date = '" . $lunchDate . "' Group By menu_item  Order by menu_item ;";
+		$SQL_Columns = "Select menu_item from student_lunches 
+					Where menu_item <> 'No Lunch' 
+					AND school_date = '" . $lunchDate . "' 
+					AND syear = UserSyear() 
+					Group By menu_item  Order by menu_item ;";
 				$gridColumns = DBGet( $SQL_Columns);
 
 		$columnTotals = array();
@@ -183,7 +207,12 @@ if(isset($_REQUEST['day']) && is_numeric($_REQUEST['day']) &&
 				            $colCount = 0;
 				            foreach($gridColumns as $gridColumn){
 				            	foreach($gridColumn as $colKey => $value){
-				                		$SQL_GridData = "Select count(menu_item) from student_lunches Where class = '" . $gridRow[$key] . "' AND menu_item = '" . $gridColumn[$colKey] . "' AND school_date = '" . $lunchDate . "';";
+				                		$SQL_GridData = "Select count(menu_item) 
+				                		from student_lunches 
+				                		Where class = '" . $gridRow[$key] . "' 
+				                		AND menu_item = '" . $gridColumn[$colKey] . "' 
+				                		AND syear = UserSyear()
+				                		AND school_date = '" . $lunchDate . "';";
 
 				                		$gridData = DBGet( $SQL_GridData);
 
@@ -238,5 +267,5 @@ if(isset($_REQUEST['day']) && is_numeric($_REQUEST['day']) &&
 	}else{ //No Lunch Orders today
 		echo ' There are no Lunch Orders';
 	}
-
+echo '</div>';
 }

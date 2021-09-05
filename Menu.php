@@ -20,4 +20,10 @@
 	    array( 'LunchReport/LunchReport.php' => _( 'Lunch Report' ) ),
 	    array_slice( $menu['Students']['admin'], $utilities_pos )
 	);
+
+	$menu['Students']['teacher'] = array_merge(
+	    array_slice( $menu['Students']['admin'], 0, $utilities_pos ),
+	    array( 'LunchReport/LunchReport.php' => _( 'Lunch Report' ) ),
+	    array_slice( $menu['Students']['admin'], $utilities_pos )
+	);
 //}

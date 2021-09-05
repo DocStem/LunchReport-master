@@ -1,0 +1,245 @@
+These are the views that need to be adjusted when together
+
+
+First you have to DROP these Views because they are tied together starting with ACTIVE STUDENTS.
+
+
+DROP VIEW public."studentID_AttendanceCount";
+DROP VIEW public.student_and_parents;
+DROP VIEW public.student_lunches;
+DROP VIEW public."systemAttendanceIssues";
+DROP VIEW public.active_students;
+
+
+Then you have to recreate them. 
+
+
+
+CREATE OR REPLACE VIEW public.active_students
+ AS
+ SELECT a.student_id,
+    a.last_name,
+    a.first_name,
+    a.middle_name,
+    a.name_suffix,
+    a.username,
+    a.password,
+    a.last_login,
+    a.failed_login,
+    a.custom_200000000,
+    a.custom_200000001,
+    a.custom_200000002,
+    a.custom_200000003,
+    a.custom_200000004,
+    a.custom_200000005,
+    a.custom_200000006,
+    a.custom_200000007,
+    a.custom_200000008,
+    a.custom_200000009,
+    a.custom_200000010,
+    a.custom_200000011,
+    a.created_at,
+    a.updated_at,
+    a.custom_200000013,
+    a.custom_200000014,
+    a.custom_200000015,
+    a.custom_200000016,
+    a.custom_200000017,
+    a.custom_200000018,
+    a.custom_200000019,
+    a.custom_200000020,
+    a.custom_200000021,
+    a.custom_200000022,
+    a.custom_200000023,
+    a.custom_200000024,
+    a.custom_200000025,
+    a.custom_200000026,
+    a.custom_200000028,
+    a.custom_200000029,
+    a.custom_200000030,
+    a.custom_200000033,
+    b.syear,
+    b.start_date,
+    b.end_date,
+    b.drop_code
+   FROM (students a
+     JOIN student_enrollment b ON ((a.student_id = b.student_id)))
+  WHERE (b.drop_code IS NULL);
+  
+ALTER TABLE public.active_students
+    OWNER TO rosariosis;
+
+
+
+
+CREATE OR REPLACE VIEW public."studentID_AttendanceCount"
+ AS
+ SELECT c.custom_200000030 AS class,
+    a.student_id,
+    c.last_name,
+    c.first_name,
+    c.syear,
+    count(a.attendance_code) FILTER (WHERE a.attendance_code = 1 OR a.attendance_code = 4) AS absent,
+    count(a.attendance_code) FILTER (WHERE a.attendance_code = 5 OR a.attendance_code = 6)::numeric * 0.5 AS halfday,
+    count(a.attendance_code) FILTER (WHERE a.attendance_code = 1 OR a.attendance_code = 4)::numeric + count(a.attendance_code) FILTER (WHERE a.attendance_code = 5 OR a.attendance_code = 6)::numeric * 0.5 AS "Total Absences",
+    count(a.attendance_code) FILTER (WHERE a.attendance_code = 7 OR a.attendance_code = 8 OR a.attendance_code = 3)::numeric + count(a.attendance_code) FILTER (WHERE a.attendance_code = 5 OR a.attendance_code = 6)::numeric * 0.5 AS presentorpresentvirtual,
+    count(a.attendance_code) FILTER (WHERE a.attendance_code = 3) AS tardy,
+    count(a.attendance_code) AS days
+   FROM attendance_period a
+     JOIN attendance_codes b ON a.attendance_code = b.id
+     JOIN active_students c ON a.student_id = c.student_id
+  GROUP BY c.custom_200000030, a.student_id, c.last_name, c.first_name
+  ORDER BY c.custom_200000030, a.student_id;
+
+ALTER TABLE public."studentID_AttendanceCount"
+    OWNER TO rosariosis;
+
+
+CREATE OR REPLACE VIEW public.student_and_parents
+ AS
+ SELECT a.student_id,
+    a.last_name,
+    a.first_name,
+    a.middle_name,
+    a.name_suffix,
+    a.username,
+    a.password,
+    a.last_login,
+    a.failed_login,
+    a.custom_200000000,
+    a.custom_200000001,
+    a.custom_200000002,
+    a.custom_200000003,
+    a.custom_200000004,
+    a.custom_200000005,
+    a.custom_200000006,
+    a.custom_200000007,
+    a.custom_200000008,
+    a.custom_200000009,
+    a.custom_200000010,
+    a.custom_200000011,
+    a.created_at,
+    a.updated_at,
+    a.custom_200000013,
+    a.custom_200000014,
+    a.custom_200000015,
+    a.custom_200000016,
+    a.custom_200000017,
+    a.custom_200000018,
+    a.custom_200000019,
+    a.custom_200000020,
+    a.custom_200000021,
+    a.custom_200000022,
+    a.custom_200000023,
+    a.custom_200000024,
+    a.custom_200000025,
+    a.custom_200000026,
+    a.custom_200000028,
+    a.custom_200000029,
+    a.custom_200000030,
+    a.custom_200000033,
+    a.syear,
+    a.start_date,
+    a.end_date,
+    a.drop_code,
+    b.staff_id,
+    c.first_name AS parent_firstname,
+    c.last_name AS parent_lastname,
+    c.email AS parent_email,
+    c.custom_200000001 AS phone,
+    c.custom_14 AS cellphone
+   FROM active_students a
+     JOIN students_join_users b ON a.student_id = b.student_id
+     JOIN staff c ON b.staff_id = c.staff_id
+  ORDER BY a.custom_200000030, a.last_name;
+
+ALTER TABLE public.student_and_parents
+    OWNER TO rosariosis;
+
+
+CREATE OR REPLACE VIEW public.student_lunches
+ AS
+ SELECT a.student_id,
+    a.last_name,
+    a.first_name,
+    a.middle_name,
+    a.name_suffix,
+    a.username,
+    a.password,
+    a.last_login,
+    a.failed_login,
+    a.custom_200000000,
+    a.custom_200000001,
+    a.custom_200000002,
+    a.custom_200000003,
+    a.custom_200000004,
+    a.custom_200000005,
+    a.custom_200000006,
+    a.custom_200000007,
+    a.custom_200000008,
+    a.custom_200000009,
+    a.custom_200000010,
+    a.custom_200000011,
+    a.created_at,
+    a.updated_at,
+    a.custom_200000013,
+    a.custom_200000014,
+    a.custom_200000015,
+    a.custom_200000016,
+    a.custom_200000017,
+    a.custom_200000018,
+    a.custom_200000019,
+    a.custom_200000020,
+    a.custom_200000021,
+    a.custom_200000022,
+    a.custom_200000023,
+    a.custom_200000024,
+    a.custom_200000025,
+    a.custom_200000026,
+    a.custom_200000028,
+    a.custom_200000029,
+    a.custom_200000030 AS class,
+    a.custom_200000033,
+    a.start_date,
+    a.end_date,
+    a.drop_code,
+	a.syear,
+    b.school_date,
+    b.period_id,
+    b.attendance_code AS lunch_item,
+    b.comment AS lunch_comment,
+    c.title AS menu_item
+   FROM active_students a
+     JOIN lunch_period b ON a.student_id = b.student_id
+     JOIN attendance_codes c ON b.attendance_code = c.id
+  ORDER BY a.student_id;
+
+ALTER TABLE public.student_lunches
+    OWNER TO rosariosis;
+
+
+    CREATE OR REPLACE VIEW public."systemAttendanceIssues"
+ AS
+ SELECT c.custom_200000030 AS class,
+    a.student_id,
+    c.last_name,
+    c.first_name,
+    c.syear,
+    a.school_date,
+    count(a.attendance_code) FILTER (WHERE a.attendance_code = 1 OR a.attendance_code = 4)::double precision AS absent,
+    count(a.attendance_code) FILTER (WHERE a.attendance_code = 5 OR a.attendance_code = 6)::double precision * 0.5::double precision AS halfday,
+    (count(a.attendance_code) FILTER (WHERE a.attendance_code = 1 OR a.attendance_code = 4)::numeric + count(a.attendance_code) FILTER (WHERE a.attendance_code = 5 OR a.attendance_code = 6)::numeric * 0.5)::double precision AS "Total Absences",
+    count(a.attendance_code) FILTER (WHERE a.attendance_code = 7 OR a.attendance_code = 8 OR a.attendance_code = 3)::numeric + count(a.attendance_code) FILTER (WHERE a.attendance_code = 5 OR a.attendance_code = 6)::numeric * 0.5 AS presentorpresentvirtual,
+    count(a.attendance_code) FILTER (WHERE a.attendance_code = 3) AS tardy,
+    count(a.attendance_code) AS days
+   FROM attendance_period a
+     JOIN attendance_codes b ON a.attendance_code = b.id
+     JOIN active_students c ON a.student_id = c.student_id
+  GROUP BY c.custom_200000030, a.student_id, c.last_name, c.first_name, a.school_date
+ HAVING count(a.attendance_code) > 1 OR count(a.attendance_code) = 0
+  ORDER BY c.custom_200000030, a.student_id, a.school_date;
+
+ALTER TABLE public."systemAttendanceIssues"
+    OWNER TO rosariosis;
+
+

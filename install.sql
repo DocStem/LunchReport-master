@@ -100,6 +100,7 @@ CREATE OR REPLACE VIEW public.active_students
     a.custom_200000029,
     a.custom_200000030,
     a.custom_200000033,
+    a.syear,
     b.start_date,
     b.end_date,
     b.drop_code
@@ -140,6 +141,7 @@ CREATE OR REPLACE VIEW public.student_lunches
     a.custom_200000011,
     a.created_at,
     a.updated_at,
+    a.syear,
     a.custom_200000013,
     a.custom_200000014,
     a.custom_200000015,
