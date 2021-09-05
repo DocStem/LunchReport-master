@@ -146,7 +146,7 @@ if(isset($_REQUEST['day']) && is_numeric($_REQUEST['day']) &&
 		from student_lunches 
 		Where menu_item <> 'No Lunch' 
 		AND school_date = '" . $lunchDate ."'
-		AND syear = UserSyear()
+		AND syear = '" . UserSyear() ."'
 		Order by school_date, class ;";
 
 		$lunchOrders = DBGet( $SQL_Lunches);
@@ -171,7 +171,7 @@ if(isset($_REQUEST['day']) && is_numeric($_REQUEST['day']) &&
 		$SQL_Columns = "Select menu_item from student_lunches 
 					Where menu_item <> 'No Lunch' 
 					AND school_date = '" . $lunchDate . "' 
-					AND syear = UserSyear() 
+					AND syear = '" . UserSyear() ."' 
 					Group By menu_item  Order by menu_item ;";
 				$gridColumns = DBGet( $SQL_Columns);
 
@@ -211,7 +211,7 @@ if(isset($_REQUEST['day']) && is_numeric($_REQUEST['day']) &&
 				                		from student_lunches 
 				                		Where class = '" . $gridRow[$key] . "' 
 				                		AND menu_item = '" . $gridColumn[$colKey] . "' 
-				                		AND syear = UserSyear()
+				                		AND syear = '" . UserSyear() ."'
 				                		AND school_date = '" . $lunchDate . "';";
 
 				                		$gridData = DBGet( $SQL_GridData);
